@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "467136046040",
+    "project_id": "fyp-skate",
+    "storage_bucket": "fyp-skate.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:467136046040:android:9a714229027217de4dc8ad",
+        "android_client_info": {
+          "package_name": "com.example.fyp_application"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "467136046040-q6j9ngh82cp4fts0udgj5l977ufu9s04.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBggpjww8c4J4L4a6xkaFoK1Xgvz46NkxY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "467136046040-q6j9ngh82cp4fts0udgj5l977ufu9s04.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
