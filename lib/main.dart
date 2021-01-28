@@ -43,7 +43,7 @@ class _AuthWrapperState extends State<AuthWrapper> {
     final firebaseUser = context.watch<User>();
 
     if (firebaseUser != null) {
-      return Text("Signed in");
+      return LoginScreen();
     }
     return LoginScreen();
   }
