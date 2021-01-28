@@ -18,10 +18,15 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
-  Widget _entryField(String title, {bool isPassword = false}) {
+  TextEditingController passController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
+  TextEditingController userNameController = TextEditingController();
+
+  Widget _entryField(String title, TextEditingController data, {bool isPassword = false}) {
     return Container(
         margin: EdgeInsets.all(20),
         child: TextField(
+            controller: data,
             obscureText: isPassword,
             decoration: InputDecoration(
             border: OutlineInputBorder(),
@@ -97,9 +102,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 child: Column(children: <Widget>[
       Container(height: 120),
       Text("Please Enter Register Details"),
-      _entryField("Username"),
-      _entryField("Email"),
-      _entryField("Password", isPassword: true),
+      _entryField("Username",userNameController),
+      _entryField("Email",emailController),
+      _entryField("Password",passController, isPassword: true),
       _submitButton(),
       _loginAccountLabel()
     ]))));
