@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:fyp_application/auth_service.dart';
+import 'package:fyp_application/home.dart';
 import 'package:fyp_application/register.dart';
 import 'package:provider/provider.dart';
 
@@ -32,7 +33,6 @@ class _LoginScreenState extends State<LoginScreen> {
   String t = "";
   String t1 = "";
 
-
   Widget _textFieldEmail() {
     return Container(
       margin: EdgeInsets.all(20),
@@ -62,10 +62,15 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget _submitButton() {
     return InkWell(
       onTap: () {
-        context.read<AuthService>().signIn(
-          email: emailController.text.trim(),
-          password: passController.text.trim()
-        );
+        try {
+          context.read<AuthService>().signIn(
+              email: emailController.text.trim(),
+              password: passController.text.trim());
+          Navigator.push(
+              context, MaterialPageRoute(builder: (context) => HomePage()));
+        } catch (e) {
+          print(e.message);
+        }
       }, // Handle your callback
       child: Container(
         width: 200,

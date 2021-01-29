@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:fyp_application/auth_service.dart';
+import 'package:fyp_application/home.dart';
 import 'package:fyp_application/login.dart';
 import 'package:fyp_application/register.dart';
 import 'package:provider/provider.dart';
@@ -38,12 +39,14 @@ class AuthWrapper extends StatefulWidget {
 }
 
 class _AuthWrapperState extends State<AuthWrapper> {
+
+  
   @override
   Widget build(BuildContext context) {
     final firebaseUser = context.watch<User>();
 
     if (firebaseUser != null) {
-      return LoginScreen();
+      return HomeScreen();
     }
     return LoginScreen();
   }
