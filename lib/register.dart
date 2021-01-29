@@ -1,6 +1,8 @@
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:fyp_application/auth_service.dart';
+import 'package:provider/provider.dart';
 
 import 'login.dart';
 
@@ -29,24 +31,33 @@ class _RegisterScreenState extends State<RegisterScreen> {
   TextEditingController emailController = TextEditingController();
   TextEditingController userNameController = TextEditingController();
   String _username, _email, _password = "";
-  
+
+  FocusNode _usernameFocusNode = FocusNode();
+  FocusNode _emailFocusNode = FocusNode();
+  FocusNode _passwordFocusNode = FocusNode();
+
   final _formKey = GlobalKey<FormState>();
 
-  void toastMessage(String message){
-   Fluttertoast.showToast(
-       msg: message,
-       toastLength: Toast.LENGTH_SHORT,
-       gravity: ToastGravity.TOP,
-       timeInSecForIos: 1,
-       fontSize: 16.0
-   );
-}
+  void toastMessage(String message) {
+    Fluttertoast.showToast(
+        msg: message,
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.TOP,
+        timeInSecForIos: 1,
+        fontSize: 16.0);
+  }
+
+  void fieldFocusChange(
+      BuildContext context, FocusNode currentFocus, FocusNode nextFocus) {
+    currentFocus.unfocus();
+    FocusScope.of(context).requestFocus(nextFocus);
+  }
 
   Widget EmailInput() {
     return Container(
         margin: EdgeInsets.all(20),
         child: TextFormField(
-          // focusNode: _emailFocusNode,
+          focusNode: _emailFocusNode,
           keyboardType: TextInputType.emailAddress,
           decoration: InputDecoration(
             border: OutlineInputBorder(),
@@ -59,9 +70,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
           validator: (email) =>
               EmailValidator.validate(email) ? null : "Invalid email address",
           onSaved: (email) => _email = email,
-          // onFieldSubmitted: (_){
-          //   fieldFocusChange(context, _emailFocusNode, _passwordFocusNode);
-          // },
+          onFieldSubmitted: (_) {
+            fieldFocusChange(context, _emailFocusNode, _passwordFocusNode);
+          },
         ));
   }
 
@@ -69,7 +80,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     return Container(
         margin: EdgeInsets.all(20),
         child: TextFormField(
-          // focusNode: _usernameFocusNode,
+          focusNode: _usernameFocusNode,
           autofocus: true,
           textCapitalization: TextCapitalization.words,
           keyboardType: TextInputType.text,
@@ -81,7 +92,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
           ),
           textInputAction: TextInputAction.next,
           validator: (name) {
-            Pattern pattern = r'^[a-zA-Z0-9]([._-](?![._-])|[a-zA-Z0-9]){3,18}[a-zA-Z0-9]$';
+            Pattern pattern =
+                r'^[a-zA-Z0-9]([._-](?![._-])|[a-zA-Z0-9]){3,18}[a-zA-Z0-9]$';
             RegExp regex = new RegExp(pattern);
             if (!regex.hasMatch(name))
               return 'Invalid username';
@@ -89,9 +101,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
               return null;
           },
           onSaved: (name) => _username = name,
-          // onFieldSubmitted: (_){
-          //   fieldFocusChange(context, _usernameFocusNode, _emailFocusNode);
-          // },
+          onFieldSubmitted: (_) {
+            fieldFocusChange(context, _usernameFocusNode, _emailFocusNode);
+          },
         ));
   }
 
@@ -99,38 +111,54 @@ class _RegisterScreenState extends State<RegisterScreen> {
     return Container(
         margin: EdgeInsets.all(20),
         child: TextFormField(
-      // focusNode: _passwordFocusNode,
-      keyboardType: TextInputType.text ,
-      obscureText: true,
-      decoration: InputDecoration(
-        border: OutlineInputBorder(),
-        labelText: "Password",
-        suffixIcon: Icon(Icons.lock_outline),
-      ),
-      textInputAction: TextInputAction.done,
-
-      validator: (password){
-        Pattern pattern =
-            r'^(?=.*[0-9]+.*)(?=.*[a-zA-Z]+.*)[0-9a-zA-Z]{6,}$';
-        RegExp regex = new RegExp(pattern);
-        if (!regex.hasMatch(password))
-          return 'Invalid password';
-        else
-          return null;
-      },
-      onSaved: (password)=> _password = password,
-    ));
+          focusNode: _passwordFocusNode,
+          keyboardType: TextInputType.text,
+          obscureText: true,
+          decoration: InputDecoration(
+            border: OutlineInputBorder(),
+            labelText: "Password",
+            suffixIcon: Icon(Icons.lock_outline),
+          ),
+          textInputAction: TextInputAction.done,
+          validator: (password) {
+            Pattern pattern =
+                r'^(?=.*[0-9]+.*)(?=.*[a-zA-Z]+.*)[0-9a-zA-Z]{6,}$';
+            RegExp regex = new RegExp(pattern);
+            if (!regex.hasMatch(password))
+              return 'Invalid password';
+            else
+              return null;
+          },
+          onSaved: (password) => _password = password,
+        ));
   }
 
+  Future<String> done;
+  String uuid;
+
+  void register() async {
+    try {
+      uuid = await context
+          .read<AuthService>()
+          .signUp(email: _email.trim(), password: _password.trim());
+
+      toastMessage(uuid + ": Account Created Successfully");
+
+      Navigator.push(context, MaterialPageRoute(builder: (context) => MyApp()));
+    } catch(e) {
+      toastMessage(e.message);
+    }
+  }
 
   Widget _submitButton() {
     return InkWell(
         onTap: () {
           if (_formKey.currentState.validate()) {
             _formKey.currentState.save();
-            toastMessage("Username: $_username\nEmail: $_email\nPassword: $_password");
+            register();
           }
         }, // Handle your callback
+
         child: Container(
           width: 200,
           padding: EdgeInsets.symmetric(vertical: 15),
@@ -157,35 +185,34 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   Widget _loginAccountLabel() {
     return InkWell(
-      onTap: () {
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => MyApp()));
-      },
-      child: Container(
-        margin: EdgeInsets.symmetric(vertical: 20),
-        padding: EdgeInsets.all(15),
-        alignment: Alignment.bottomCenter,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              'Already have an account ?',
-              style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
-            ),
-            SizedBox(
-              width: 10,
-            ),
-            Text(
-              'Login',
-              style: TextStyle(
-                  color: Color(0xfff79c4f),
-                  fontSize: 13,
-                  fontWeight: FontWeight.w600),
-            ),
-          ],
-        ),
-      ),
-    );
+        onTap: () {
+          Navigator.push(
+              context, MaterialPageRoute(builder: (context) => MyApp()));
+        },
+        child: Container(
+          margin: EdgeInsets.symmetric(vertical: 20),
+          padding: EdgeInsets.all(15),
+          alignment: Alignment.bottomCenter,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Text(
+                'Already have an account ?',
+                style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
+              ),
+              SizedBox(
+                width: 10,
+              ),
+              Text(
+                'Login',
+                style: TextStyle(
+                    color: Color(0xfff79c4f),
+                    fontSize: 13,
+                    fontWeight: FontWeight.w600),
+              ),
+            ],
+          ),
+        ));
   }
 
   @override
@@ -207,15 +234,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
     return Form(
         key: _formKey,
-        child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Text("Please Enter Register Details"),
-              NameInput(),
-              EmailInput(),
-              PasswordInput(),
-              _submitButton(),
-              _loginAccountLabel()
-            ]));
+        child: Column(children: <Widget>[
+          SizedBox(
+            height: 16,
+          ),
+          Text("Please Enter Register Details"),
+          NameInput(),
+          EmailInput(),
+          PasswordInput(),
+          _submitButton(),
+          _loginAccountLabel()
+        ]));
   }
 }
