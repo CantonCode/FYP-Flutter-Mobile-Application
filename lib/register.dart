@@ -1,3 +1,4 @@
+import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 
 import 'login.dart';
@@ -26,26 +27,89 @@ class _RegisterScreenState extends State<RegisterScreen> {
   TextEditingController passController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController userNameController = TextEditingController();
+  String _username, _email, _password = "";
   final _formKey = GlobalKey<FormState>();
 
-  Widget _entryField(String title, TextEditingController data,
-      {bool isPassword = false}) {
+  Widget EmailInput() {
     return Container(
         margin: EdgeInsets.all(20),
         child: TextFormField(
-            controller: data,
-            validator: (value) {
-              if (value.isEmpty) {
-                return "Please enter " + title;
-              }
-              return null;
-            },
-            obscureText: isPassword,
-            decoration: InputDecoration(
-              border: OutlineInputBorder(),
-              labelText: title,
-            )));
+          // focusNode: _emailFocusNode,
+          keyboardType: TextInputType.emailAddress,
+          decoration: InputDecoration(
+            border: OutlineInputBorder(),
+            labelText: "Email",
+            hintText: "e.g abc@gmail.com",
+            suffixIcon: Icon(Icons.email_outlined),
+          ),
+          textInputAction: TextInputAction.next,
+          controller: emailController,
+          validator: (email) =>
+              EmailValidator.validate(email) ? null : "Invalid email address",
+          onSaved: (email) => _email = email,
+          // onFieldSubmitted: (_){
+          //   fieldFocusChange(context, _emailFocusNode, _passwordFocusNode);
+          // },
+        ));
   }
+
+  Widget NameInput() {
+    return Container(
+        margin: EdgeInsets.all(20),
+        child: TextFormField(
+          // focusNode: _usernameFocusNode,
+          autofocus: true,
+          textCapitalization: TextCapitalization.words,
+          keyboardType: TextInputType.text,
+          decoration: InputDecoration(
+            border: OutlineInputBorder(),
+            labelText: "Username",
+            hintText: "e.g Morgan123",
+            suffixIcon: Icon(Icons.supervised_user_circle_outlined),
+          ),
+          textInputAction: TextInputAction.next,
+          validator: (name) {
+            Pattern pattern = r'^[a-zA-Z0-9]([._-](?![._-])|[a-zA-Z0-9]){3,18}[a-zA-Z0-9]$';
+            RegExp regex = new RegExp(pattern);
+            if (!regex.hasMatch(name))
+              return 'Invalid username';
+            else
+              return null;
+          },
+          onSaved: (name) => _username = name,
+          // onFieldSubmitted: (_){
+          //   fieldFocusChange(context, _usernameFocusNode, _emailFocusNode);
+          // },
+        ));
+  }
+
+  Widget PasswordInput() {
+    return Container(
+        margin: EdgeInsets.all(20),
+        child: TextFormField(
+      // focusNode: _passwordFocusNode,
+      keyboardType: TextInputType.text ,
+      obscureText: true,
+      decoration: InputDecoration(
+        border: OutlineInputBorder(),
+        labelText: "Password",
+        suffixIcon: Icon(Icons.lock_outline),
+      ),
+      textInputAction: TextInputAction.done,
+
+      validator: (password){
+        Pattern pattern =
+            r'^(?=.*[0-9]+.*)(?=.*[a-zA-Z]+.*)[0-9a-zA-Z]{6,}$';
+        RegExp regex = new RegExp(pattern);
+        if (!regex.hasMatch(password))
+          return 'Invalid password';
+        else
+          return null;
+      },
+      onSaved: (password)=> _password = password,
+    ));
+  }
+
 
   Widget _submitButton() {
     return InkWell(
@@ -134,13 +198,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
     return Form(
         key: _formKey,
         child: Column(
-            
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Text("Please Enter Register Details"),
-              _entryField("Username", userNameController),
-              _entryField("Email", emailController),
-              _entryField("Password", passController, isPassword: true),
+              NameInput(),
+              EmailInput(),
+              PasswordInput(),
               _submitButton(),
               _loginAccountLabel()
             ]));
