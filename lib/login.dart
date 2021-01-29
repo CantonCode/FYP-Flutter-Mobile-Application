@@ -32,12 +32,6 @@ class _LoginScreenState extends State<LoginScreen> {
   String t = "";
   String t1 = "";
 
-  void _setText() {
-    setState(() {
-      t = email;
-      t1 = password;
-    });
-  }
 
   Widget _textFieldEmail() {
     return Container(

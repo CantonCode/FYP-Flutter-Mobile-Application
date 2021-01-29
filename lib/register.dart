@@ -1,5 +1,6 @@
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 import 'login.dart';
 
@@ -28,7 +29,18 @@ class _RegisterScreenState extends State<RegisterScreen> {
   TextEditingController emailController = TextEditingController();
   TextEditingController userNameController = TextEditingController();
   String _username, _email, _password = "";
+  
   final _formKey = GlobalKey<FormState>();
+
+  void toastMessage(String message){
+   Fluttertoast.showToast(
+       msg: message,
+       toastLength: Toast.LENGTH_SHORT,
+       gravity: ToastGravity.TOP,
+       timeInSecForIos: 1,
+       fontSize: 16.0
+   );
+}
 
   Widget EmailInput() {
     return Container(
@@ -115,10 +127,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
     return InkWell(
         onTap: () {
           if (_formKey.currentState.validate()) {
-            // If the form is valid, display a snackbar. In the real world,
-            // you'd often call a server or save the information in a database.
-            Scaffold.of(context)
-                .showSnackBar(SnackBar(content: Text('Processing Data')));
+            _formKey.currentState.save();
+            toastMessage("Username: $_username\nEmail: $_email\nPassword: $_password");
           }
         }, // Handle your callback
         child: Container(
