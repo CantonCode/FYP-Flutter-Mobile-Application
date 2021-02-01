@@ -62,15 +62,11 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget _submitButton() {
     return InkWell(
       onTap: () {
-        try {
           context.read<AuthService>().signIn(
               email: emailController.text.trim(),
               password: passController.text.trim());
-          Navigator.push(
-              context, MaterialPageRoute(builder: (context) => HomePage()));
-        } catch (e) {
-          print(e.message);
-        }
+          // Navigator.push(
+          //     context, MaterialPageRoute(builder: (context) => HomePage()));
       }, // Handle your callback
       child: Container(
         width: 200,

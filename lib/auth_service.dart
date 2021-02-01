@@ -1,4 +1,3 @@
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -22,9 +21,9 @@ class AuthService {
 
   Future<String> signIn({String email, String password}) async {
     try {
-      await _firebaseAuth.signInWithEmailAndPassword(
+      final currentUser = await _firebaseAuth.signInWithEmailAndPassword(
           email: email, password: password);
-      return "signed in";
+      return currentUser.user.email;
     } on FirebaseAuthException catch (e) {
       return e.message;
     }
@@ -35,7 +34,8 @@ class AuthService {
     final currentUser = await _firebaseAuth.createUserWithEmailAndPassword(
         email: email, password: password);
 
-    currentUser.user.updateProfile(displayName: username);
+    await currentUser.user.updateProfile(displayName: username);
+    await currentUser.user.reload();
 
     return currentUser.user.email;
   }

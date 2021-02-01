@@ -25,8 +25,6 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  
-
   @override
   Widget build(BuildContext context) {
     final firebaseUser = context.watch<User>();
@@ -43,11 +41,16 @@ class _HomeScreenState extends State<HomeScreen> {
       SizedBox(
         height: 16,
       ),
-      Text("WELCOME: " + firebaseUser.displayName.toString()),
+      Text("WELCOME: " + firebaseUser.email.toString()),
       SizedBox(
         height: 16,
       ),
-      // _signOutButton(),
+      RaisedButton(
+        onPressed: () {
+          context.read<AuthService>().signOut();
+        },
+        child: Text("Sign Out"),
+      )
     ])))));
   }
 }
