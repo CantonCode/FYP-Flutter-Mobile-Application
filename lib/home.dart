@@ -79,23 +79,29 @@ class _HomeScreenState extends State<HomeScreen> {
               SizedBox(
                 height: 16,
               ),
-              new Image.asset('images/skater2.png', width: 100.0, height: 100.0),
               ClipOval(
                   child: Container(
                 width: 100,
                 height: 100,
-                child: Icon(Icons.play_arrow_outlined,size: 40,) ,
+                child: Icon(
+                  Icons.play_arrow_outlined,
+                  size: 40,
+                ),
                 decoration: BoxDecoration(
                     gradient: LinearGradient(
                         begin: Alignment.centerLeft,
                         end: Alignment.centerRight,
                         colors: [Color(0xfffbb448), Color(0xfff7892b)])),
-
               )),
-              RaisedButton(
-                onPressed: () {},
-                child: Text("Connect Device"),
-              ),
+               Expanded(
+                child: Align(
+                  alignment: Alignment.bottomCenter,
+                  child: RaisedButton(
+                    onPressed: () {},
+                    child: Text("Connect Device"),
+                  ))),
+                  SizedBox(height:20),
+                  
             ])))));
   }
 }
