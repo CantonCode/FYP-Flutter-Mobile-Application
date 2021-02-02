@@ -79,6 +79,7 @@ class _HomeScreenState extends State<HomeScreen> {
               SizedBox(
                 height: 16,
               ),
+              new Image.asset('images/skater2.png', width: 100.0, height: 100.0),
               ClipOval(
                   child: Container(
                 width: 100,
