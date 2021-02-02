@@ -35,7 +35,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 children: <Widget>[
                   UserAccountsDrawerHeader(
                     accountName: Text("Ashish Rawat"),
-                    accountEmail: Text("ashishrawat2911@gmail.com"),
+                    accountEmail: Text(firebaseUser.email),
                     currentAccountPicture: CircleAvatar(
                       backgroundColor:
                           Theme.of(context).platform == TargetPlatform.iOS
@@ -48,12 +48,19 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                   ListTile(
-                    title: Text("Ttem 1"),
-                    trailing: Icon(Icons.arrow_forward),
+                      title: Text("Previous Sessions"),
+                      trailing: Icon(Icons.arrow_back_rounded)),
+                  ListTile(
+                    title: Text("User Settings"),
+                    trailing: Icon(Icons.supervised_user_circle_sharp),
+                    onTap: () {},
                   ),
                   ListTile(
-                    title: Text("Item 2"),
-                    trailing: Icon(Icons.arrow_forward),
+                    title: Text("Sign Out"),
+                    trailing: Icon(Icons.exit_to_app_sharp),
+                    onTap: () {
+                      context.read<AuthService>().signOut();
+                    },
                   ),
                 ],
               ),
@@ -72,12 +79,22 @@ class _HomeScreenState extends State<HomeScreen> {
               SizedBox(
                 height: 16,
               ),
+              ClipOval(
+                  child: Container(
+                width: 100,
+                height: 100,
+                child: Icon(Icons.play_arrow_outlined,size: 40,) ,
+                decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                        begin: Alignment.centerLeft,
+                        end: Alignment.centerRight,
+                        colors: [Color(0xfffbb448), Color(0xfff7892b)])),
+
+              )),
               RaisedButton(
-                onPressed: () {
-                  context.read<AuthService>().signOut();
-                },
-                child: Text("Sign Out"),
-              )
+                onPressed: () {},
+                child: Text("Connect Device"),
+              ),
             ])))));
   }
 }
