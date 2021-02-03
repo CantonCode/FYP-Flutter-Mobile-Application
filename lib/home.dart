@@ -49,11 +49,27 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  Widget _topBar() {
+    return Row(
+      children: [
+    Builder(
+          builder: (context) => IconButton(
+            icon: new Icon(Icons.menu),
+            onPressed: () => Scaffold.of(context).openDrawer(),
+            color: Colors.orangeAccent,
+          ),
+        ),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final GlobalKey<ScaffoldState> _scaffoldKey =
         new GlobalKey<ScaffoldState>();
-        final firebaseUser = context.watch<User>();
+    final firebaseUser = context.watch<User>();
+    double w = MediaQuery.of(context).size.width;
+    double h = MediaQuery.of(context).size.height;
 
     return MaterialApp(
         home: Scaffold(
@@ -63,30 +79,10 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Container(
                     child: Column(children: <Widget>[
               SizedBox(
-                height: 50,
+                height: h * 0.1,
               ),
-              Row(
-                children: [
-                  Builder(builder: (context) => IconButton(
-            icon: new Icon(Icons.menu),
-            onPressed: () => Scaffold.of(context).openDrawer(),
-            color: Colors.orangeAccent,
-          ),
-)
-                  // IconButton(
-                  //   icon: Icon(Icons.menu),
-                  //   onPressed: () => Scaffold.of(context).openDrawer(),
-                  //   color: Colors.orangeAccent,
-                  // )
-                ],
-              ),
-              SizedBox(
-                height: 16,
-              ),
-              Text("WELCOME: " + firebaseUser.email.toString()),
-              SizedBox(
-                height: 16,
-              ),
+              _topBar(),
+              
               ClipOval(
                   child: Container(
                 width: 100,
