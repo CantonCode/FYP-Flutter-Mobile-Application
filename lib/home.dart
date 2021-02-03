@@ -96,22 +96,24 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
 
   Widget _startSession() {
     return Container(
-        decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            gradient: LinearGradient(
-                begin: Alignment.centerLeft,
-                end: Alignment.centerRight,
-                colors: [Color(0xfffbb448), Color(0xfff7892b)])),
-        child: IconButton(
-          iconSize: 150,
-          splashColor: Colors.greenAccent,
-          icon: AnimatedIcon(
-            color: Colors.white,
-            icon: AnimatedIcons.pause_play,
-            progress: _animationController,
-          ),
-          onPressed: () => _handleOnPressed(),
-        ));
+      margin: EdgeInsets.all(10.0),
+      decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          gradient: LinearGradient(
+              begin: Alignment.centerLeft,
+              end: Alignment.centerRight,
+              colors: [Color(0xfffbb448), Color(0xfff7892b)])),
+      child: IconButton(
+        iconSize: 150,
+        splashColor: Colors.greenAccent,
+        icon: AnimatedIcon(
+          color: Colors.white,
+          icon: AnimatedIcons.pause_play,
+          progress: _animationController,
+        ),
+        onPressed: () => _handleOnPressed(),
+      ),
+    );
   }
 
   @override
@@ -139,7 +141,11 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                 width: 300,
                 fit: BoxFit.fitHeight,
               ),
-              _startSession(),
+              
+              Expanded(child: Align(
+                      alignment: Alignment.bottomCenter,
+                      child: _startSession())),
+              
 
               // ClipOval(
               //     child: Container(
