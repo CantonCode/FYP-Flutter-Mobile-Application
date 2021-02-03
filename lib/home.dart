@@ -24,6 +24,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   AnimationController _animationController;
+  AnimationController _controller;
   bool isPlaying = false;
 
   @override
@@ -31,14 +32,20 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     super.initState();
     _animationController =
         AnimationController(vsync: this, duration: Duration(milliseconds: 450));
+    _controller =
+        AnimationController(vsync: this, duration: Duration(milliseconds: 450));
   }
 
   void _handleOnPressed() {
+    _changeOpacity();
     setState(() {
       isPlaying = !isPlaying;
       isPlaying
+          // ignore: unnecessary_statements
           ? _animationController.forward()
           : _animationController.reverse();
+
+      isPlaying ? _controller.forward() : _controller.reverse();
     });
   }
 
@@ -116,6 +123,21 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     );
   }
 
+  Widget _session() {
+    double w = MediaQuery.of(context).size.width;
+    double h = MediaQuery.of(context).size.height;
+    return Container(
+      width: w - 25,
+      height: 400,
+      color: Colors.blue,
+    );
+  }
+
+  double opacityLevel = 1.0;
+  void _changeOpacity() {
+    setState(() => opacityLevel = opacityLevel == 0 ? 1.0 : 0.0);
+  }
+
   @override
   Widget build(BuildContext context) {
     final GlobalKey<ScaffoldState> _scaffoldKey =
@@ -123,6 +145,11 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     final firebaseUser = context.watch<User>();
     double w = MediaQuery.of(context).size.width;
     double h = MediaQuery.of(context).size.height;
+
+     Animation aanimation = Tween(
+      begin: 1.0,
+      end: 0.0,
+    ).animate(_controller);
 
     return MaterialApp(
         home: Scaffold(
@@ -135,17 +162,36 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                 height: h * 0.1,
               ),
               _topBar(),
-              Image.asset(
-                "image/skate1.png",
-                height: 300,
-                width: 300,
-                fit: BoxFit.fitHeight,
-              ),
-              
-              Expanded(child: Align(
+              FadeTransition(
+                  opacity: _animationController,
+                  child: Container(
+                    key: ValueKey(0),
+                    child: Image.asset("image/skate1.png",
+                        height: 300, width: 300, fit: BoxFit.fitHeight),
+                  )),
+
+              // AnimatedSwitcher(
+              //   duration: Duration(milliseconds: 1000),
+              //   child: !isPlaying
+              //       ? Container(
+              //           key: ValueKey(0),
+              //           child: Image.asset("image/skate1.png",
+              //               height: 300, width: 300, fit: BoxFit.fitHeight),
+              //         )
+              //       : Container(
+              //         child: _session(),
+              //       ),
+              //   switchOutCurve: Threshold(0),
+              //   transitionBuilder: (_session, curve) => ScaleTransition(
+              //     scale: curve,
+              //     child: _session,
+              //   ),
+              // ),
+
+              Expanded(
+                  child: Align(
                       alignment: Alignment.bottomCenter,
                       child: _startSession())),
-              
 
               // ClipOval(
               //     child: Container(
