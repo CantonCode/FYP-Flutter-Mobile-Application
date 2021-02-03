@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:fyp_application/auth_service.dart';
 
 import 'package:provider/provider.dart';
+
 class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -15,12 +16,32 @@ class HomePage extends StatelessWidget {
     );
   }
 }
+
 class HomeScreen extends StatefulWidget {
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
+  AnimationController _animationController;
+  bool isPlaying = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _animationController =
+        AnimationController(vsync: this, duration: Duration(milliseconds: 450));
+  }
+
+  void _handleOnPressed() {
+    setState(() {
+      isPlaying = !isPlaying;
+      isPlaying
+          ? _animationController.forward()
+          : _animationController.reverse();
+    });
+  }
+
   Widget _drawer() {
     final firebaseUser = context.watch<User>();
     return Drawer(
@@ -62,7 +83,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _topBar() {
     return Row(
       children: [
-    Builder(
+        Builder(
           builder: (context) => IconButton(
             icon: new Icon(Icons.menu),
             onPressed: () => Scaffold.of(context).openDrawer(),
@@ -71,6 +92,26 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ],
     );
+  }
+
+  Widget _startSession() {
+    return Container(
+        decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            gradient: LinearGradient(
+                begin: Alignment.centerLeft,
+                end: Alignment.centerRight,
+                colors: [Color(0xfffbb448), Color(0xfff7892b)])),
+        child: IconButton(
+          iconSize: 150,
+          splashColor: Colors.greenAccent,
+          icon: AnimatedIcon(
+            color: Colors.white,
+            icon: AnimatedIcons.pause_play,
+            progress: _animationController,
+          ),
+          onPressed: () => _handleOnPressed(),
+        ));
   }
 
   @override
@@ -92,29 +133,36 @@ class _HomeScreenState extends State<HomeScreen> {
                 height: h * 0.1,
               ),
               _topBar(),
-              
-              ClipOval(
-                  child: Container(
-                width: 100,
-                height: 100,
-                child: Icon(
-                  Icons.play_arrow_outlined,
-                  size: 40,
-                ),
-                decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                        begin: Alignment.centerLeft,
-                        end: Alignment.centerRight,
-                        colors: [Color(0xfffbb448), Color(0xfff7892b)])),
-              )),
-              Expanded(
-                  child: Align(
-                      alignment: Alignment.bottomCenter,
-                      child: RaisedButton(
-                        onPressed: () {},
-                        child: Text("Connect Device"),
-                      ))),
-              SizedBox(height: 20),
+              Image.asset(
+                "image/skate1.png",
+                height: 300,
+                width: 300,
+                fit: BoxFit.fitHeight,
+              ),
+              _startSession(),
+
+              // ClipOval(
+              //     child: Container(
+              //   width: 100,
+              //   height: 100,
+              //   child: Icon(
+              //     Icons.play_arrow_outlined,
+              //     size: 40,
+              //   ),
+              //   decoration: BoxDecoration(
+              //       gradient: LinearGradient(
+              //           begin: Alignment.centerLeft,
+              //           end: Alignment.centerRight,
+              //           colors: [Color(0xfffbb448), Color(0xfff7892b)])),
+              // )),
+              // Expanded(
+              //     child: Align(
+              //         alignment: Alignment.bottomCenter,
+              //         child: RaisedButton(
+              //           onPressed: () {},
+              //           child: Text("Connect Device"),
+              //         ))),
+              // SizedBox(height: 20),
             ])))));
   }
 }
