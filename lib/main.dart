@@ -48,7 +48,7 @@ class _AuthWrapperState extends State<AuthWrapper> {
 
     if (firebaseUser != null) {
       print("NOT NULL");
-      return HomeScreen();
+      return HomePage();
     }
     return LoginScreen();
   }

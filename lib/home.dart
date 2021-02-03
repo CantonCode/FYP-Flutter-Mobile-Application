@@ -4,7 +4,17 @@ import 'package:flutter/material.dart';
 import 'package:fyp_application/auth_service.dart';
 
 import 'package:provider/provider.dart';
-
+class HomePage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: "Home",
+      home: Scaffold(
+        body: HomeScreen(),
+      ),
+    );
+  }
+}
 class HomeScreen extends StatefulWidget {
   @override
   _HomeScreenState createState() => _HomeScreenState();
