@@ -151,6 +151,32 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     setState(() => opacityLevel = opacityLevel == 0 ? 1.0 : 0.0);
   }
 
+  Widget _sceneStart() {
+    Animation aanimation = Tween(
+      begin: 1.0,
+      end: 0.0,
+    ).animate(_controller);
+    return Stack(
+      children: <Widget>[
+        RotationTransition(turns: _animationController,
+        child:FadeTransition(
+            opacity: _animationController,
+            child: Container(
+              key: ValueKey(0),
+              alignment: Alignment.center,
+              child: Image.asset("image/skate1.png",
+                  height: 325, width: 300, fit: BoxFit.fitHeight),
+            ))),
+        FadeTransition(
+            opacity: aanimation,
+            child: Container(
+              alignment: Alignment.center,
+              child: _session(),
+            )),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final GlobalKey<ScaffoldState> _scaffoldKey =
@@ -158,11 +184,6 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     final firebaseUser = context.watch<User>();
     double w = MediaQuery.of(context).size.width;
     double h = MediaQuery.of(context).size.height;
-
-    Animation aanimation = Tween(
-      begin: 1.0,
-      end: 0.0,
-    ).animate(_controller);
 
     return MaterialApp(
         home: Scaffold(
@@ -175,24 +196,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                 height: h * 0.1,
               ),
               _topBar(),
-              Stack(
-                children: <Widget>[
-                  FadeTransition(
-                      opacity: _animationController,
-                      child: Container(
-                        key: ValueKey(0),
-                        alignment: Alignment.center,
-                        child: Image.asset("image/skate1.png",
-                            height: 325, width: 300, fit: BoxFit.fitHeight),
-                      )),
-                  FadeTransition(
-                      opacity: aanimation,
-                      child: Container(
-                        alignment: Alignment.center,
-                        child: _session(),
-                      )),
-                ],
-              ),
+              _sceneStart(),
 
               FadeTransition(
                   opacity: _animationController,
