@@ -146,7 +146,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     double w = MediaQuery.of(context).size.width;
     double h = MediaQuery.of(context).size.height;
 
-     Animation aanimation = Tween(
+    Animation aanimation = Tween(
       begin: 1.0,
       end: 0.0,
     ).animate(_controller);
@@ -162,13 +162,26 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                 height: h * 0.1,
               ),
               _topBar(),
-              FadeTransition(
-                  opacity: _animationController,
-                  child: Container(
-                    key: ValueKey(0),
-                    child: Image.asset("image/skate1.png",
-                        height: 300, width: 300, fit: BoxFit.fitHeight),
-                  )),
+              Stack(
+                children: <Widget>[
+                  
+                    FadeTransition(
+                        opacity: _animationController,
+                        child: Container(
+                          key: ValueKey(0),
+                          alignment: Alignment.center,
+                          child: Image.asset("image/skate1.png",
+                              height: 300, width: 300, fit: BoxFit.fitHeight),
+                        )),
+                    FadeTransition(
+                        opacity: aanimation,
+                        child: Container(
+                          alignment: Alignment.center,
+                          child: _session(),
+                        )),
+                  
+                ],
+              ),
 
               // AnimatedSwitcher(
               //   duration: Duration(milliseconds: 1000),
