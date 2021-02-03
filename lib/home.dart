@@ -127,10 +127,23 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     double w = MediaQuery.of(context).size.width;
     double h = MediaQuery.of(context).size.height;
     return Container(
-      width: w - 25,
-      height: 400,
-      color: Colors.blue,
-    );
+        width: w - 45,
+        height: 400,
+        decoration: BoxDecoration(
+            border: Border.all(color: Colors.deepOrange, width: 3),
+            borderRadius: BorderRadius.all(Radius.circular(20))),
+        child: Column(
+          children: <Widget>[
+            SizedBox(height: 15),
+            Align(
+                alignment: Alignment.center,
+                child: Text("Session Started",
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 40)))
+          ],
+        ));
   }
 
   double opacityLevel = 1.0;
@@ -164,42 +177,33 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
               _topBar(),
               Stack(
                 children: <Widget>[
-                  
-                    FadeTransition(
-                        opacity: _animationController,
-                        child: Container(
-                          key: ValueKey(0),
-                          alignment: Alignment.center,
-                          child: Image.asset("image/skate1.png",
-                              height: 300, width: 300, fit: BoxFit.fitHeight),
-                        )),
-                    FadeTransition(
-                        opacity: aanimation,
-                        child: Container(
-                          alignment: Alignment.center,
-                          child: _session(),
-                        )),
-                  
+                  FadeTransition(
+                      opacity: _animationController,
+                      child: Container(
+                        key: ValueKey(0),
+                        alignment: Alignment.center,
+                        child: Image.asset("image/skate1.png",
+                            height: 325, width: 300, fit: BoxFit.fitHeight),
+                      )),
+                  FadeTransition(
+                      opacity: aanimation,
+                      child: Container(
+                        alignment: Alignment.center,
+                        child: _session(),
+                      )),
                 ],
               ),
 
-              // AnimatedSwitcher(
-              //   duration: Duration(milliseconds: 1000),
-              //   child: !isPlaying
-              //       ? Container(
-              //           key: ValueKey(0),
-              //           child: Image.asset("image/skate1.png",
-              //               height: 300, width: 300, fit: BoxFit.fitHeight),
-              //         )
-              //       : Container(
-              //         child: _session(),
-              //       ),
-              //   switchOutCurve: Threshold(0),
-              //   transitionBuilder: (_session, curve) => ScaleTransition(
-              //     scale: curve,
-              //     child: _session,
-              //   ),
-              // ),
+              FadeTransition(
+                  opacity: _animationController,
+                  child: Container(
+                      key: ValueKey(0),
+                      alignment: Alignment.center,
+                      child: Text("Start Session",
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 40)))),
 
               Expanded(
                   child: Align(
