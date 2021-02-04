@@ -203,7 +203,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                   child: Container(
                       key: ValueKey(0),
                       alignment: Alignment.center,
-                      child: Text("Start Session",
+                      child: Text("Begin Session",
                           style: TextStyle(
                               color: Colors.black,
                               fontWeight: FontWeight.bold,
